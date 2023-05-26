@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace ClothingStore.Data.Validators;
 
-public class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>
+public class CreateProductRequestValidator : AbstractValidator<AddProductRequest>
 {
     public CreateProductRequestValidator()
     {

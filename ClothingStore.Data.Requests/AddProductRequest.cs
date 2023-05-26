@@ -2,7 +2,7 @@
 
 namespace ClothingStore.Data.Requests;
 
-public record CreateProductRequest
+public record AddProductRequest
 {
     public string Name { get; set; } = null!;
 

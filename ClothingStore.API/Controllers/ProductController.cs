@@ -2,10 +2,12 @@
 using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
 using ClothingStore.Data.Requests;
+using ClothingStore.Data.Validators;
 using ClothingStore.Services.FileSaveService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ClothingStore.API.Controllers;
 
@@ -18,7 +20,7 @@ public class ProductController : ControllerBase
 {
     private readonly DataContext _dataContext;
     private readonly FileSaveService _fileSaveService;
-    
+
     /// <summary>
     /// Конструктор класса
     /// </summary>
@@ -52,31 +54,62 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
     [HttpPost]
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
+    public async Task<IActionResult> CreateProduct([FromBody] AddProductRequest request)
     {
+        var validationResult = await FluentModelValidator.ExecuteAsync<CreateProductRequestValidator, AddProductRequest>(request);
+        if (validationResult.IsValid == false)
+            return BadRequest(validationResult.Errors);
+
         var product = new Product
         {
             Name = request.Name,
             Description = request.Description
         };
 
-        await SaveProductImage(request.Image, product);
+        await SetProductImage(request.Image, product);
+        await SetProductCategories(request.CategoriesIds, product);
 
         var entry = await _dataContext.AddAsync(product);
         await _dataContext.SaveChangesAsync();
-        
+
         return Ok(entry.Entity);
+    }
+
+    /// <summary>
+    /// Изменить информацию о товаре
+    /// </summary>
+    /// <param name="productId"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
+    [HttpPut("{productId:int}")]
+    public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromBody] EditProductRequest request)
+    {
+        var product = await _dataContext.Products
+            .FirstOrDefaultAsync(x => x.Id == productId);
+
+        if (product is null)
+            return NotFound();
+
+        await EditProduct(product, request);
+
+        _dataContext.Products.Update(product);
+        await _dataContext.SaveChangesAsync();
+
+        return Ok(product);
     }
 
     /// <summary>
     /// Удалить товар
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
     [HttpDelete("{productId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -93,8 +126,8 @@ public class ProductController : ControllerBase
 
         return Ok();
     }
-    
-    private async ValueTask SaveProductImage(IFormFile? formFile, Product product)
+
+    private async ValueTask SetProductImage(IFormFile? formFile, Product product)
     {
         if (formFile is null)
             return;
@@ -107,7 +140,22 @@ public class ProductController : ControllerBase
         var categories = await _dataContext.Categories
             .Where(x => ids.Contains(x.Id))
             .ToListAsync();
-        
-        
+
+        product.Categories = categories;
+    }
+
+    private async Task EditProduct(Product product, EditProductRequest request)
+    {
+        if (request.Name is not null)
+            product.Name = request.Name;
+
+        if (request.Description is not null)
+            product.Description = request.Description;
+
+        if (request.Categories is not null)
+            await SetProductCategories(request.Categories, product);
+
+        if (request.Image is not null)
+            await SetProductImage(request.Image, product);
     }
 }
