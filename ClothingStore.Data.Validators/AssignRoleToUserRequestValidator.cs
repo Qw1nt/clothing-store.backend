@@ -1,4 +1,5 @@
-﻿using ClothingStore.Data.Requests;
+﻿using ClothingStore.Configurations;
+using ClothingStore.Data.Requests;
 using FluentValidation;
 
 namespace ClothingStore.Data.Validators;
@@ -9,7 +10,11 @@ public class AssignRoleToUserRequestValidator : AbstractValidator<AssignRoleToUs
     {
         RuleFor(x => x.Role)
             .NotEmpty()
-            .NotNull();
+            .NotNull()
+            .Must(x => x 
+                is IdentityConfiguration.Roles.Admin
+                or IdentityConfiguration.Roles.Manager
+                or IdentityConfiguration.Roles.User);
 
         RuleFor(x => x.UserId)
             .NotNull()

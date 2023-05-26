@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ClothingStore.Configurations\ClothingStore.Configurations.csproj" />
       <ProjectReference Include="..\ClothingStore.Data.Requests\ClothingStore.Data.Requests.csproj" />
     </ItemGroup>
 
