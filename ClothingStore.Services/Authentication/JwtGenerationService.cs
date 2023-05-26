@@ -4,7 +4,7 @@ using ClothingStore.Configurations;
 using ClothingStore.Data.Context.Entities;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ClothingStore.Services;
+namespace ClothingStore.Services.Authentication;
 
 public class JwtGenerationService
 {

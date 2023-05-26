@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
 using ClothingStore.Configurations;
 using ClothingStore.Data.Context;
+using ClothingStore.Data.Context.Entities;
 using ClothingStore.Data.Requests;
 using ClothingStore.Data.Responses;
 using ClothingStore.Services;
+using ClothingStore.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +80,30 @@ public class IdentityController : ControllerBase
         return result.Success ? Ok(result) : NotFound(result.Error);
     }
 
+    /// <summary>
+    /// Задать роль пользователю
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
+    [HttpPut("assign-role")]
+    [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SetRole([FromBody] AssignRoleToUserRequest request)
+    {
+        var user = await _dataContext.Users
+            .FirstOrDefaultAsync(x => x.Id == request.UserId);
+
+        if (user == null)
+            return NotFound();
+
+        user.Role = request.Role;
+        _dataContext.Users.Update(user);
+        await _dataContext.SaveChangesAsync();
+
+        return Ok(user);
+    }
+
     private async Task<IActionResult> RegisterInternal(RegisterRequest request, string? role = null)
     {
         var canRegister = await PossibilityRegistration(request);
@@ -101,16 +127,4 @@ public class IdentityController : ControllerBase
 
         return Ok("Success");
     }
-    
-    /*private async ValueTask<bool> TryAddWithAdminGroup(RegisterRequest request)
-    {
-        if (request.GroupCode == IdentityConfiguration.UserGroup.User)
-            return true;
-
-        var exist = await _dataContext.Users
-            .AsNoTracking()
-            .AnyAsync(x => x.Group.Code == IdentityConfiguration.UserGroup.Admin);
-
-        return !exist;
-    }*/
 }

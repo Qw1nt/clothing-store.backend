@@ -1,4 +1,4 @@
-﻿namespace ClothingStore.Services;
+﻿namespace ClothingStore.Services.HashSalt;
 
 public interface IHashSaltService
 {

@@ -3,9 +3,10 @@ using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
 using ClothingStore.Data.Requests;
 using ClothingStore.Data.Responses;
+using ClothingStore.Services.HashSalt;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClothingStore.Services;
+namespace ClothingStore.Services.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {

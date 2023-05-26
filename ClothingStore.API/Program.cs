@@ -1,6 +1,9 @@
 using ClothingStore.API.Extensions;
 using ClothingStore.Configurations;
 using ClothingStore.Services;
+using ClothingStore.Services.Authentication;
+using ClothingStore.Services.FileSaveService;
+using ClothingStore.Services.HashSalt;
 using VKWebApi.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +26,9 @@ services.AddDataContext(configuration);
 services.AddScoped<IHashSaltService, ComputeHashSaltService>();
 services.AddScoped<JwtGenerationService>();
 services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+services.AddFileSaveService<FileSaveService>(builder);
+
 services.AddSingleton(authenticationConfig);
 
 var app = builder.Build();

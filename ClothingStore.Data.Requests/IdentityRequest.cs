@@ -1,6 +1,6 @@
 ﻿namespace ClothingStore.Data.Requests;
 
-public class IdentityRequest
+public record IdentityRequest
 {
     public string Login { get; set; } = null!;
 

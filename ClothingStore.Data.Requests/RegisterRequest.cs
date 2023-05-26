@@ -1,6 +1,6 @@
 ﻿namespace ClothingStore.Data.Requests;
 
-public class RegisterRequest : IdentityRequest
+public record RegisterRequest : IdentityRequest
 {
     
 }

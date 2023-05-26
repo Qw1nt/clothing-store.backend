@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace ClothingStore.Services;
+namespace ClothingStore.Services.HashSalt;
 
 public class ComputeHashSaltService : IHashSaltService
 {

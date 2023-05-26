@@ -1,7 +1,7 @@
 ﻿using ClothingStore.Data.Requests;
 using ClothingStore.Data.Responses;
 
-namespace ClothingStore.Services;
+namespace ClothingStore.Services.Authentication;
 
 public interface IAuthenticationService
 {

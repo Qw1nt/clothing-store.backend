@@ -11,6 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
@@ -27,10 +29,6 @@
       <ProjectReference Include="..\ClothingStore.Data.Requests\ClothingStore.Data.Requests.csproj" />
       <ProjectReference Include="..\ClothingStore.Data.Responses\ClothingStore.Data.Responses.csproj" />
       <ProjectReference Include="..\ClothingStore.Services\ClothingStore.Services.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Attributes\" />
     </ItemGroup>
 
 </Project>
