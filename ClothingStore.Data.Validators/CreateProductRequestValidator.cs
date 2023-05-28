@@ -14,5 +14,8 @@ public class CreateProductRequestValidator : AbstractValidator<AddProductRequest
         RuleFor(x => x.CategoriesIds.Count)
             .NotNull()
             .GreaterThan(0);
+
+        RuleFor(x => x.Price)
+            .GreaterThan(0);
     }
 }

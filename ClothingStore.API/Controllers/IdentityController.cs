@@ -123,7 +123,7 @@ public class IdentityController : ControllerBase
             return BadRequest("Error");
 
         if (await _dataContext.Users.AnyAsync(x => x.Login == request.Login))
-            return BadRequest("User with this login is already registered");
+            return BadRequest("Пользователь с таким логином уже зарегистрирован");
 
         return Ok("Success");
     }

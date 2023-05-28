@@ -15,7 +15,7 @@ namespace ClothingStore.API.Controllers;
 /// Товары
 /// </summary>
 [ApiController]
-[Route("products")]
+[Route("product")]
 public class ProductController : ControllerBase
 {
     private readonly DataContext _dataContext;
@@ -58,7 +58,7 @@ public class ProductController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateProduct([FromBody] AddProductRequest request)
+    public async Task<IActionResult> CreateProduct([FromForm] AddProductRequest request)
     {
         var validationResult = await FluentModelValidator.ExecuteAsync<CreateProductRequestValidator, AddProductRequest>(request);
         if (validationResult.IsValid == false)
@@ -67,7 +67,8 @@ public class ProductController : ControllerBase
         var product = new Product
         {
             Name = request.Name,
-            Description = request.Description
+            Description = request.Description,
+            Price = request.Price
         };
 
         await SetProductImage(request.Image, product);
@@ -89,9 +90,10 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
     [HttpPut("{productId:int}")]
-    public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromBody] EditProductRequest request)
+    public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromForm] EditProductRequest request)
     {
         var product = await _dataContext.Products
+            .Include(x => x.Reviews)
             .FirstOrDefaultAsync(x => x.Id == productId);
 
         if (product is null)
@@ -146,15 +148,18 @@ public class ProductController : ControllerBase
 
     private async Task EditProduct(Product product, EditProductRequest request)
     {
+        if (request.Categories is not null)
+            await SetProductCategories(request.Categories, product);
+        
         if (request.Name is not null)
             product.Name = request.Name;
 
         if (request.Description is not null)
             product.Description = request.Description;
 
-        if (request.Categories is not null)
-            await SetProductCategories(request.Categories, product);
-
+        if (request.Price is not null)
+            product.Price = (double) request.Price;
+        
         if (request.Image is not null)
             await SetProductImage(request.Image, product);
     }

@@ -1,6 +1,5 @@
 using ClothingStore.API.Extensions;
 using ClothingStore.Configurations;
-using ClothingStore.Services;
 using ClothingStore.Services.Authentication;
 using ClothingStore.Services.FileSaveService;
 using ClothingStore.Services.HashSalt;
@@ -30,6 +29,7 @@ services.AddScoped<IAuthenticationService, AuthenticationService>();
 services.AddFileSaveService<FileSaveService>(builder);
 
 services.AddSingleton(authenticationConfig);
+services.AddCors();
 
 var app = builder.Build();
 
@@ -39,10 +39,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(configure =>
+{
+    configure
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin();
+});
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseClaimsDetermination();
 
 app.MapControllers();
 

@@ -28,7 +28,8 @@ public class AuthenticationService : IAuthenticationService
             Login = request.Login,
             PasswordHash = request.Password,
             Salt = _hashSaltService.Salt(),
-            Role =  role ?? IdentityConfiguration.Roles.User 
+            Role =  role ?? IdentityConfiguration.Roles.User,
+            RegisterDate = DateTime.UtcNow
         };
         
         user.PasswordHash = _hashSaltService.Hash(user.PasswordHash, user.Salt);

@@ -34,4 +34,8 @@
       <ProjectReference Include="..\ClothingStore.Services\ClothingStore.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
 </Project>

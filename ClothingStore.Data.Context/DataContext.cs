@@ -17,9 +17,13 @@ public class DataContext : DbContext
     
     public DbSet<User> Users => Set<User>();
 
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+
     public DbSet<Product> Products => Set<Product>();
 
     public DbSet<Category> Categories => Set<Category>();
 
     public DbSet<Review> Reviews => Set<Review>();
+
+    public DbSet<Order> Orders => Set<Order>();
 }

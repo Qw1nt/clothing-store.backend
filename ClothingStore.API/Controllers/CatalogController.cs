@@ -38,22 +38,49 @@ public class CatalogController : ControllerBase
     }
 
     /// <summary>
-    /// Получить товар по ID
+    /// Получить 3 последних добавленных товара
     /// </summary>
-    /// <param name="productId">ID товара</param>
     /// <returns></returns>
-    [HttpGet("{productId:int}")]
-    [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetById([FromRoute] int productId)
+    [HttpGet("top-new/{count}")]
+    [ProducesResponseType(typeof(IQueryable<Product>), StatusCodes.Status200OK)]
+    public IActionResult GetNewProducts([FromRoute] int count)
     {
-        var product = await _dataContext.Products
+        var result = _dataContext.Products
             .AsNoTracking()
-            .Include(x => x.Categories)
-            .FirstOrDefaultAsync(x => x.Id == productId);
+            .OrderByDescending(p => p.Id)
+            .Take(count);
 
-        if (product is null)
-            return NotFound();
-        
-        return Ok(product);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Получить хиты продаж
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("bestsellers")]
+    public IActionResult GetBestsellers()
+    {
+        var result = _dataContext.Products
+            .AsNoTracking()
+            .OrderByDescending(p => p.PurchasedCount)
+            .Take(8);
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Получить товары в категории
+    /// </summary>
+    /// <param name="categoryId">ID категории</param>
+    /// <returns></returns>
+    [HttpGet("category/{categoryId:int}")]
+    public IActionResult GetByCategory([FromRoute] int categoryId)
+    {
+        var result = _dataContext.Products
+            .AsNoTracking()
+            .Where(x => x.Categories != null)
+            .Where(x => x.Categories.Any(c => c.Id == categoryId));
+
+        return Ok(result);
     }
 }
