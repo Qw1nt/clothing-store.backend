@@ -7,4 +7,6 @@ public class Review : Entity
     public string Title { get; set; } = null!;
     
     public string Content { get; set; } = null!;
+    
+    public DateTime Date { get; set; }
 }

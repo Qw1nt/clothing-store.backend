@@ -1,4 +1,5 @@
-﻿using ClothingStore.Configurations;
+﻿using ClothingStore.API.Extensions;
+using ClothingStore.Configurations;
 using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
 using ClothingStore.Data.Requests;
@@ -44,9 +45,55 @@ public class ProductController : ControllerBase
     {
         var product = await _dataContext.Products
             .AsNoTracking()
+            .Include(x => x.Reviews)!
+                .ThenInclude(x => x.Owner)
             .FirstOrDefaultAsync(x => x.Id == productId);
 
         return product == null ? NotFound() : Ok(product);
+    }
+
+    /// <summary>
+    /// Добавить отзыв на товар
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("review")]
+    public async Task<IActionResult> CreateReview([FromBody] CreateReviewForProductRequest request)
+    {
+        this.TryGetIdClaim(out int userId);
+
+        var alreadyCreate = _dataContext.Products
+            .AsNoTracking()
+            .Any(x => x.Reviews != null && x.Reviews.Any(y => y.Owner.Id == userId));
+
+        if (alreadyCreate == true)
+            return BadRequest("Вы уже оставляли отзыв на этот товар");
+
+        var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        if (user is null)
+            return BadRequest();
+        
+        var review = new Review
+        {
+            Owner = user,
+            Title = request.Title,
+            Content = request.Content,
+            Date = DateTime.UtcNow
+        };
+
+        var reviewEntry = await _dataContext.Reviews.AddAsync(review);
+
+        var product = await _dataContext.Products
+            .FirstOrDefaultAsync(x => x.Id == request.ProductId);
+        if (product is null)
+            return BadRequest();
+
+        product.Reviews ??= new List<Review>();
+        product.Reviews.Add(reviewEntry.Entity);
+        
+        await _dataContext.SaveChangesAsync();
+        return Ok(reviewEntry.Entity);
     }
 
     /// <summary>

@@ -15,6 +15,6 @@ public class Product : Entity
     public string? Color { get; set; }
     
     public string? ImageUrl { get; set; }
-    
-    public List<Review>? Reviews { get; set; }
+
+    public List<Review>? Reviews { get; set; } = new();
 }

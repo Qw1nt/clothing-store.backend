@@ -1,4 +1,5 @@
-﻿using ClothingStore.API.Extensions;
+﻿using System.Text.Json;
+using ClothingStore.API.Extensions;
 using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace ClothingStore.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly DataContext _dataContext;
-    
+
     /// <summary>
     /// Конструктор класса
     /// </summary>
@@ -35,7 +36,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetInfo()
     {
         this.TryGetIdClaim(out int id);
-        
+
         var user = await _dataContext.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
@@ -45,5 +46,32 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
-    
+
+    /// <summary>
+    /// Получить историю покупок
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    [HttpGet("order/history")]
+    [ProducesResponseType(typeof(List<OrderInHistory>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetOrderHistory()
+    {
+        this.TryGetIdClaim(out int userId);
+
+        var orders = await _dataContext.Orders
+            .AsNoTracking()
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+
+        var result = new List<OrderInHistory>();
+
+        foreach (var order in orders)
+        {
+            List<CartItem> items = JsonSerializer.Deserialize<List<CartItem>>(order.JsonData) ?? new();
+
+            result.Add(new OrderInHistory {Items = items});
+        }
+
+        return Ok(result);
+    }
 }

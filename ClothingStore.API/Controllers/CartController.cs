@@ -37,13 +37,13 @@ public class CartController : ControllerBase
     public async Task<IActionResult> GetProductsInCartCount()
     {
         this.TryGetIdClaim(out int userId);
-        
+
         var count = await _dataContext.CartItems
             .AsNoTracking()
             .Where(x => x.UserId == userId)
             .Select(x => x.Count)
             .SumAsync();
-            
+
         return Ok(count);
     }
 
@@ -64,7 +64,7 @@ public class CartController : ControllerBase
 
         return Ok(result);
     }
-    
+
     /// <summary>
     /// Добавить товар в корзину
     /// </summary>
@@ -78,7 +78,7 @@ public class CartController : ControllerBase
 
         if (product is null)
             return BadRequest($"Товар с ID {request.ProductId} не найден");
-        
+
         this.TryGetIdClaim(out int userId);
 
         var cartItem = await _dataContext.CartItems
@@ -88,10 +88,10 @@ public class CartController : ControllerBase
         if (cartItem is not null)
         {
             cartItem.Count += request.Count;
-            
+
             _dataContext.CartItems.Update(cartItem);
             await _dataContext.SaveChangesAsync();
-            
+
             return Ok(cartItem);
         }
 
@@ -102,10 +102,10 @@ public class CartController : ControllerBase
             Count = 1
         };
 
-        await _dataContext.CartItems.AddAsync(cartItem);
+        var entry = await _dataContext.CartItems.AddAsync(cartItem);
         await _dataContext.SaveChangesAsync();
-        
-        return Ok();
+
+        return Ok(entry.Entity);
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class CartController : ControllerBase
             await FluentModelValidator.ExecuteAsync<CheckoutRequestValidator, CheckoutRequest>(request);
         if (validationResult.IsValid == false)
             return BadRequest(validationResult.Errors);
-        
+
         this.TryGetIdClaim(out int id);
 
         var user = await _dataContext.Users
@@ -130,20 +130,45 @@ public class CartController : ControllerBase
 
         if (user is null)
             return BadRequest("Пользователь не найден");
-        
+
         var orderJsonData = JsonSerializer.Serialize(request.CartItems);
         await _dataContext.Orders.AddAsync(new Order()
         {
             UserId = user.Id,
             JsonData = orderJsonData
         });
-        
+
         _dataContext.CartItems.RemoveRange(request.CartItems);
-        
         await _dataContext.SaveChangesAsync();
+
         return Ok(request.CartItems);
     }
-    
+
+    /// <summary>
+    /// Обновить кол-во купленных товаров
+    /// </summary>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPut("purchased-count")]
+    public async Task<IActionResult> UpdatePurchasedCount([FromBody] List<UpdateProductPurchasedCount> request)
+    {
+        var productsIds = request.Select(x => x.ProductId);
+        var products = _dataContext.Products
+            .Where(x => productsIds.Contains(x.Id));
+
+        foreach (var product in products)
+        {
+            var count = request.First(x => x.ProductId == product.Id).Count;
+            product.PurchasedCount += count;
+        }
+
+        _dataContext.Products.UpdateRange(products);
+        await _dataContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
+
     /// <summary>
     /// Удалить товар
     /// </summary>
@@ -158,7 +183,7 @@ public class CartController : ControllerBase
 
         if (item is null)
             return NotFound($"Не удалось найти товар с ID {itemId}");
-        
+
         _dataContext.CartItems.Remove(item);
         await _dataContext.SaveChangesAsync();
 
