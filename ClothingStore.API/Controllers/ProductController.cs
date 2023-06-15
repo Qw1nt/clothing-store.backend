@@ -128,6 +128,27 @@ public class ProductController : ControllerBase
     }
 
     /// <summary>
+    /// Обновить изображение
+    /// </summary>
+    /// <param name="productId"></param>
+    /// <param name="image"></param>
+    /// <returns></returns>
+    [HttpPut("image/{productId:int}")]
+    public async Task<IActionResult> UpdateProductImage([FromRoute] int productId, [FromForm] IFormFile image)
+    {
+        var product = await _dataContext.Products
+            .FirstOrDefaultAsync(x => x.Id == productId);
+
+        if (product is null)
+            return BadRequest();
+        
+        await SetProductImage(image, product);
+        _dataContext.Products.Update(product);
+        await _dataContext.SaveChangesAsync();
+        return Ok();
+    }
+
+    /// <summary>
     /// Изменить информацию о товаре
     /// </summary>
     /// <param name="productId"></param>
@@ -137,7 +158,7 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
     [HttpPut("{productId:int}")]
-    public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromForm] EditProductRequest request)
+    public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromBody] EditProductRequest request)
     {
         var product = await _dataContext.Products
             .Include(x => x.Reviews)
@@ -169,7 +190,10 @@ public class ProductController : ControllerBase
 
         if (product is null)
             return NotFound();
-
+        
+        // product.Categories = null;
+        await _dataContext.SaveChangesAsync();
+        
         _dataContext.Products.Remove(product);
         await _dataContext.SaveChangesAsync();
 
@@ -186,14 +210,30 @@ public class ProductController : ControllerBase
 
     private async Task SetProductCategories(List<int> ids, Product product)
     {
-        var categories = await _dataContext.Categories
+        var categories= await _dataContext.Categories
             .Where(x => ids.Contains(x.Id))
             .ToListAsync();
 
-        product.Categories = categories;
+        var existCategories = await _dataContext.Categories
+            .Where(x => x.Products.Contains(product))
+            .ToListAsync();
+
+        foreach (var category in existCategories)
+        {
+            category.Products.Remove(product);
+        }
+        
+        _dataContext.Categories.UpdateRange(existCategories);
+
+        foreach (var category in categories)
+        {
+            category.Products.Add(product);
+        }
+
+        _dataContext.Categories.UpdateRange(categories);
     }
 
-    private async Task EditProduct(Product product, EditProductRequest request)
+    private async ValueTask EditProduct(Product product, EditProductRequest request)
     {
         if (request.Categories is not null)
             await SetProductCategories(request.Categories, product);
@@ -206,8 +246,5 @@ public class ProductController : ControllerBase
 
         if (request.Price is not null)
             product.Price = (double) request.Price;
-        
-        if (request.Image is not null)
-            await SetProductImage(request.Image, product);
     }
 }

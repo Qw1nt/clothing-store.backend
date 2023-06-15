@@ -5,4 +5,6 @@ namespace ClothingStore.Data.Context;
 public class OrderInHistory
 {
     public List<CartItem> Items { get; set; } = new();
+
+    public DateTime Date { get; set; }
 }

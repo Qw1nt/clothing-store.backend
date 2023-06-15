@@ -135,7 +135,8 @@ public class CartController : ControllerBase
         await _dataContext.Orders.AddAsync(new Order()
         {
             UserId = user.Id,
-            JsonData = orderJsonData
+            JsonData = orderJsonData,
+            Date = DateTime.UtcNow
         });
 
         _dataContext.CartItems.RemoveRange(request.CartItems);

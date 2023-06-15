@@ -69,7 +69,7 @@ public class UserController : ControllerBase
         {
             List<CartItem> items = JsonSerializer.Deserialize<List<CartItem>>(order.JsonData) ?? new();
 
-            result.Add(new OrderInHistory {Items = items});
+            result.Add(new OrderInHistory {Items = items, Date = order.Date});
         }
 
         return Ok(result);

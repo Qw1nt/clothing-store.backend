@@ -2,7 +2,7 @@
 
 public class Product : Entity
 {
-    public List<Category>? Categories { get; set; } = new();
+    // public List<Category>? Categories { get; set; } = new();
 
     public string Name { get; set; } = null!;
 

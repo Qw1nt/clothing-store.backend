@@ -1,5 +1,7 @@
-﻿using ClothingStore.Data.Context;
+﻿/*using ClothingStore.Configurations;
+using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -83,4 +85,19 @@ public class CatalogController : ControllerBase
 
         return Ok(result);
     }
-}
+
+    /// <summary>
+    /// Получить отсортированный список товаров
+    /// </summary>
+    /// <returns></returns>
+    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
+    [HttpGet("sorted")]
+    public IActionResult GetSorted()
+    {
+        var orderByDescending = _dataContext.Products
+            .AsNoTracking()
+            .OrderByDescending(x => x.Id);
+
+        return Ok(orderByDescending);
+    }
+}*/
