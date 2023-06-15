@@ -1,0 +1,12 @@
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\bin\Debug\net7.0\ClothingStore.Configurations.deps.json
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\bin\Debug\net7.0\ClothingStore.Configurations.dll
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\bin\Debug\net7.0\ClothingStore.Configurations.pdb
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.csproj.AssemblyReference.cache
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.GeneratedMSBuildEditorConfig.editorconfig
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.AssemblyInfoInputs.cache
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.AssemblyInfo.cs
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.csproj.CoreCompileInputs.cache
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.dll
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\refint\ClothingStore.Configurations.dll
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ClothingStore.Configurations.pdb
+F:\RiderProjects\ClothingStoreAPI\ClothingStore.Configurations\obj\Debug\net7.0\ref\ClothingStore.Configurations.dll

@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ClothingStore.API</name>
+    </assembly>
+    <members>
+        <member name="T:ClothingStore.API.Controllers.CartController">
+            <summary>
+            Корзина
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.#ctor(ClothingStore.Data.Context.DataContext)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.GetProductsInCartCount">
+            <summary>
+            Получить кол-во товаров в корзине
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.GetCart">
+            <summary>
+            Получить товары в корзине
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.AddProductToCart(ClothingStore.Data.Requests.AddProductToCartRequest)">
+            <summary>
+            Добавить товар в корзину
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.Checkout(ClothingStore.Data.Requests.CheckoutRequest)">
+            <summary>
+            Оформить заказ
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.UpdatePurchasedCount(System.Collections.Generic.List{ClothingStore.Data.Requests.UpdateProductPurchasedCount})">
+            <summary>
+            Обновить кол-во купленных товаров
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CartController.DeleteItem(System.Int32)">
+            <summary>
+            Удалить товар
+            </summary>
+            <param name="itemId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Controllers.CategoryController">
+            <summary>
+            Категории товаров
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CategoryController.#ctor(ClothingStore.Data.Context.DataContext)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CategoryController.GetAll">
+            <summary>
+            Получить все категории
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CategoryController.AddCategory(ClothingStore.Data.Requests.AddCategoryRequest)">
+            <summary>
+            Добавить категорию
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CategoryController.EditCategory(ClothingStore.Data.Requests.EditCategoryRequest)">
+            <summary>
+            Редактировать категорию
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.CategoryController.DeleteCategory(System.Int32)">
+            <summary>
+            Удалить категорию
+            </summary>
+            <param name="categoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Controllers.IdentityController">
+            <summary>
+            Контроллер идентификации
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.IdentityController.#ctor(Microsoft.Extensions.Caching.Memory.IMemoryCache,ClothingStore.Services.Authentication.IAuthenticationService,ClothingStore.Data.Context.DataContext)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="memoryCache"></param>
+            <param name="authenticationService"></param>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.IdentityController.Register(ClothingStore.Data.Requests.RegisterRequest)">
+            <summary>
+            Регистрация пользователя
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.IdentityController.RegisterWithRole(System.String,ClothingStore.Data.Requests.RegisterRequest)">
+            <summary>
+            Регистрация пользователя с ролью 
+            </summary>
+            <param name="role">Роль пользователя</param>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.IdentityController.Login(ClothingStore.Data.Requests.IdentityRequest)">
+            <summary>
+            Авторизация пользователя
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.IdentityController.SetRole(ClothingStore.Data.Requests.AssignRoleToUserRequest)">
+            <summary>
+            Задать роль пользователю
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Controllers.ProductController">
+            <summary>
+            Товары
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.#ctor(ClothingStore.Data.Context.DataContext,ClothingStore.Services.FileSaveService.FileSaveService)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="dataContext">Поставщик данных</param>
+            <param name="fileSaveService"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.GetProduct(System.Int32)">
+            <summary>
+            Получить товар по ID
+            </summary>
+            <param name="productId">ID товара</param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.CreateReview(ClothingStore.Data.Requests.CreateReviewForProductRequest)">
+            <summary>
+            Добавить отзыв на товар
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.CreateProduct(ClothingStore.Data.Requests.AddProductRequest)">
+            <summary>
+            Добавить товар
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.UpdateProductImage(System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Обновить изображение
+            </summary>
+            <param name="productId"></param>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.EditProduct(System.Int32,ClothingStore.Data.Requests.EditProductRequest)">
+            <summary>
+            Изменить информацию о товаре
+            </summary>
+            <param name="productId"></param>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ProductController.DeleteProduct(System.Int32)">
+            <summary>
+            Удалить товар
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Controllers.ReportController">
+            <summary>
+            Формирование отчётов
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ReportController.#ctor(ClothingStore.Data.Context.DataContext)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.ReportController.BuildReport(ClothingStore.Data.Requests.BuildProductReportRequest)">
+            <summary>
+            Сформировать отчёт
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Controllers.UserController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.UserController.#ctor(ClothingStore.Data.Context.DataContext)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.UserController.GetInfo">
+            <summary>
+            Получить информацию
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ClothingStore.API.Controllers.UserController.GetOrderHistory">
+            <summary>
+            Получить историю покупок
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.AuthenticationExtensions">
+            <summary>
+            Методы-расширения аутентификации
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.AuthenticationExtensions.AddJwtAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,ClothingStore.Configurations.AuthenticationConfiguration)">
+            <summary>
+            Добавляет JWT аутентификацию
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.AuthorizationExtensions">
+            <summary>
+            Методы-расширения авторизации
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.AuthorizationExtensions.AddAuthorizationWithPolicy(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Политика авторизации
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.DataContextExtensions">
+            <summary>
+            Методы-расширения для DataContext
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.DataContextExtensions.AddDataContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Подключить PostgreSQL
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.FileSaveServiceExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.FileSaveServiceExtensions.AddFileSaveService``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+            <param name="builder"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.IdentityExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.IdentityExtensions.TryGetIdClaim(Microsoft.AspNetCore.Mvc.ControllerBase,System.Int32@)">
+            <summary>
+            
+            </summary>
+            <param name="controllerBase"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.ClaimsMiddleware">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.ClaimsMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Конструктор класса
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.ClaimsMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Вызывается автоматически
+            </summary>
+            <param name="httpContext"></param>
+        </member>
+        <member name="T:ClothingStore.API.Extensions.ClaimsMiddlewareExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Extensions.ClaimsMiddlewareExtensions.UseClaimsDetermination(Microsoft.AspNetCore.Builder.WebApplication)">
+            <summary>
+            
+            </summary>
+            <param name="application"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ClothingStore.API.Mapper.MapperProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ClothingStore.API.Mapper.MapperProfile.ProductProfile">
+            <summary>
+            Профиль для товаров и услуг
+            </summary>
+        </member>
+        <member name="M:ClothingStore.API.Mapper.MapperProfile.ProductProfile.#ctor">
+            <summary>
+            Конструктор клааса. В нём объявляются все карты для маппинга
+            </summary>
+        </member>
+        <member name="T:ClothingStore.API.Migrations.Initial">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ClothingStore.API.Migrations.Second">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Second.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Second.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ClothingStore.API.Migrations.Second.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:VKWebApi.Core.Extensions.SwaggerExtensions">
+            <summary>
+            Методы-расширения для Swagger'a
+            </summary>
+        </member>
+        <member name="M:VKWebApi.Core.Extensions.SwaggerExtensions.AddAuthenticationSwaggerGen(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Расширенный swagger с поддержкой авторизации
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
