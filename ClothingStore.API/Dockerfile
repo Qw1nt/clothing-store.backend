@@ -5,13 +5,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ClothingStore.API/ClothingStore.API.csproj", "ClothingStore.API/"]
-COPY ["ClothingStore.Configurations/ClothingStore.Configurations.csproj", "ClothingStore.Configurations/"]
-COPY ["ClothingStore.Data.Context/ClothingStore.Data.Context.csproj", "ClothingStore.Data.Context/"]
-COPY ["ClothingStore.Data.Requests/ClothingStore.Data.Requests.csproj", "ClothingStore.Data.Requests/"]
-COPY ["ClothingStore.Data.Responses/ClothingStore.Data.Responses.csproj", "ClothingStore.Data.Responses/"]
-COPY ["ClothingStore.Data.Validators/ClothingStore.Data.Validators.csproj", "ClothingStore.Data.Validators/"]
-COPY ["ClothingStore.Services/ClothingStore.Services.csproj", "ClothingStore.Services/"]
+COPY ["./ClothingStore.API/ClothingStore.API.csproj", "ClothingStore.API/"]
+COPY ["./ClothingStore.Configurations/ClothingStore.Configurations.csproj", "ClothingStore.Configurations/"]
+COPY ["./ClothingStore.Data.Context/ClothingStore.Data.Context.csproj", "ClothingStore.Data.Context/"]
+COPY ["./ClothingStore.Data.Requests/ClothingStore.Data.Requests.csproj", "ClothingStore.Data.Requests/"]
+COPY ["./ClothingStore.Data.Responses/ClothingStore.Data.Responses.csproj", "ClothingStore.Data.Responses/"]
+COPY ["./ClothingStore.Data.Validators/ClothingStore.Data.Validators.csproj", "ClothingStore.Data.Validators/"]
+COPY ["./ClothingStore.Services/ClothingStore.Services.csproj", "ClothingStore.Services/"]
 RUN dotnet restore "ClothingStore.API/ClothingStore.API.csproj"
 COPY . .
 WORKDIR "/src/ClothingStore.API"
