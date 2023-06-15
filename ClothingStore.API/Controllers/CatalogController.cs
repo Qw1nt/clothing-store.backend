@@ -1,4 +1,4 @@
-﻿/*using ClothingStore.Configurations;
+﻿using ClothingStore.Configurations;
 using ClothingStore.Data.Context;
 using ClothingStore.Data.Context.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,7 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
     public IActionResult Get()
     {
-        var products =  _dataContext.Products
+        var products = _dataContext.Products
             .AsNoTracking();
 
         return Ok(products);
@@ -78,10 +78,10 @@ public class CatalogController : ControllerBase
     [HttpGet("category/{categoryId:int}")]
     public IActionResult GetByCategory([FromRoute] int categoryId)
     {
-        var result = _dataContext.Products
+        var result = _dataContext.Categories
             .AsNoTracking()
-            .Where(x => x.Categories != null)
-            .Where(x => x.Categories.Any(c => c.Id == categoryId));
+            .Where(x => x.Id == categoryId)
+            .Select(x => x.Products);
 
         return Ok(result);
     }
@@ -100,4 +100,4 @@ public class CatalogController : ControllerBase
 
         return Ok(orderByDescending);
     }
-}*/
+}

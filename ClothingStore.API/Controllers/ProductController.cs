@@ -101,7 +101,7 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpPost]
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -156,7 +156,7 @@ public class ProductController : ControllerBase
     /// <returns></returns>
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpPut("{productId:int}")]
     public async Task<IActionResult> EditProduct([FromRoute] int productId, [FromBody] EditProductRequest request)
     {
@@ -179,7 +179,7 @@ public class ProductController : ControllerBase
     /// Удалить товар
     /// </summary>
     /// <returns></returns>
-    [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
+    [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpDelete("{productId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
