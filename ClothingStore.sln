@@ -1,18 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.API", "ClothingStore.API\ClothingStore.API.csproj", "{CF942980-9885-449B-AF15-DFF0A305CC68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{CF942980-9885-449B-AF15-DFF0A305CC68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Configurations", "ClothingStore.Configurations\ClothingStore.Configurations.csproj", "{A9F09EFE-AD7B-49B9-B3AC-716A9C2756C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{7FA56BB2-40A3-4F57-93F0-98E8D803F4DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Data.Context", "ClothingStore.Data.Context\ClothingStore.Data.Context.csproj", "{7FA56BB2-40A3-4F57-93F0-98E8D803F4DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{DEB1E350-CFC2-44C8-B4A8-2751AD411556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Services", "ClothingStore.Services\ClothingStore.Services.csproj", "{DEB1E350-CFC2-44C8-B4A8-2751AD411556}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Data.Requests", "ClothingStore.Data.Requests\ClothingStore.Data.Requests.csproj", "{C34D5DCD-1C96-41C1-9BAA-2090429290B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C34D5DCD-1C96-41C1-9BAA-2090429290B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Data.Responses", "ClothingStore.Data.Responses\ClothingStore.Data.Responses.csproj", "{273188DD-2A31-4468-BC42-6B0172450059}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClothingStore.Data.Validators", "ClothingStore.Data.Validators\ClothingStore.Data.Validators.csproj", "{1804B6C7-5942-4974-94A5-CFCA321DE9D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +20,6 @@ Global
 		{CF942980-9885-449B-AF15-DFF0A305CC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF942980-9885-449B-AF15-DFF0A305CC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF942980-9885-449B-AF15-DFF0A305CC68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9F09EFE-AD7B-49B9-B3AC-716A9C2756C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9F09EFE-AD7B-49B9-B3AC-716A9C2756C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9F09EFE-AD7B-49B9-B3AC-716A9C2756C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9F09EFE-AD7B-49B9-B3AC-716A9C2756C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7FA56BB2-40A3-4F57-93F0-98E8D803F4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FA56BB2-40A3-4F57-93F0-98E8D803F4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA56BB2-40A3-4F57-93F0-98E8D803F4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,9 +36,5 @@ Global
 		{273188DD-2A31-4468-BC42-6B0172450059}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{273188DD-2A31-4468-BC42-6B0172450059}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{273188DD-2A31-4468-BC42-6B0172450059}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1804B6C7-5942-4974-94A5-CFCA321DE9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1804B6C7-5942-4974-94A5-CFCA321DE9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1804B6C7-5942-4974-94A5-CFCA321DE9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1804B6C7-5942-4974-94A5-CFCA321DE9D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
