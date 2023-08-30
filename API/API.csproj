@@ -35,7 +35,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\Application\Application.csproj" />
-      <ProjectReference Include="..\ClothingStore.Data.Responses\ClothingStore.Data.Responses.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 

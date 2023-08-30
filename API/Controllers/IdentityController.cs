@@ -1,7 +1,7 @@
 ﻿using API.Extensions;
 using Application.UserIdentity.Commands;
 using Domain.Entities;
-using ClothingStore.Data.Responses;
+using Domain.Common;
 using Domain.Common.Configurations;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +33,7 @@ public class IdentityController : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    [ProducesResponseType(typeof(RegisterResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IdentityKeyPair), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command)
     {
@@ -49,7 +49,7 @@ public class IdentityController : ControllerBase
     /// <returns></returns>
     [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpPost("register-with-role/{role}")]
-    [ProducesResponseType(typeof(RegisterResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IdentityKeyPair), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterWithRole([FromRoute] string role, [FromBody] RegisterCommand command)
     {
@@ -63,7 +63,7 @@ public class IdentityController : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IdentityKeyPair), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
