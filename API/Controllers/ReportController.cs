@@ -1,12 +1,9 @@
-﻿using System.Text.Json;
-using Application;
-using Domain;
-using Domain.Entities;
-using Domain.Common;
+﻿using API.Extensions;
+using Application.Reports.Commands;
 using Domain.Common.Configurations;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -17,55 +14,26 @@ namespace API.Controllers;
 [Route("report")]
 public class ReportController : ControllerBase
 {
-    private readonly DataContext _dataContext;
-
+    private readonly IMediator _mediator;
+    
     /// <summary>
     /// Конструктор класса
     /// </summary>
-    /// <param name="dataContext"></param>
-    public ReportController(DataContext dataContext)
+    public ReportController(IMediator mediator)
     {
-        _dataContext = dataContext;
+        _mediator = mediator;
     }
 
     /// <summary>
     /// Сформировать отчёт
     /// </summary>
-    /// <param name="request"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [Authorize(Policy = IdentityConfiguration.Policy.Manager)]
     [HttpPost]
-    public async Task<IActionResult> BuildReport([FromBody] BuildProductReportRequest request)
+    public async Task<IActionResult> BuildReport([FromBody] BuildProductReportCommand command)
     {
-        var products = await _dataContext.Products
-            .AsNoTracking()
-            .Where(x => request.ProductsIds.Contains(x.Id))
-            .ToListAsync();
-
-        var orders = await _dataContext.Orders
-            .AsNoTracking()
-            .Where(x => x.Date > request.StartDate && x.Date < request.EndDate)
-            .ToListAsync();
-
-        var result = new List<ReportRecord>();
-        
-        foreach (var product in products)
-        {
-            var record = new ReportRecord {Product = product};
-
-            foreach (var order in orders)
-            {
-                var data = JsonSerializer.Deserialize<List<CartItem>>(order.JsonData);
-
-                var cartItem = data?.FirstOrDefault(x => x.Product.Id == product.Id);
-                
-                if (cartItem != null)
-                    record.Count += cartItem.Count;
-            }
-
-            result.Add(record);
-        }
-
-        return Ok(result);
+        var result = await _mediator.Send(command);
+        return result.ToHttpResponse();
     }
 }

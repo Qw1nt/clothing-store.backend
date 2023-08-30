@@ -1,8 +1,9 @@
-﻿using FluentValidation;
+﻿using Application.Categories.Commands;
+using FluentValidation;
 
 namespace Application.Common.Validators;
 
-public class AddCategoryRequestValidator : AbstractValidator<AddCategoryRequest>
+public class AddCategoryRequestValidator : AbstractValidator<AddCategoryCommand>
 {
     public AddCategoryRequestValidator()
     {

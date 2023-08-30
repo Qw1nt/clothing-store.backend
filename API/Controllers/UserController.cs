@@ -1,8 +1,10 @@
 ﻿using System.Text.Json;
 using API.Extensions;
+using Application.Users.Queries;
 using Domain;
 using Domain.Common;
 using Domain.Entities;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +18,14 @@ namespace API.Controllers;
 [Route("user")]
 public class UserController : ControllerBase
 {
-    private readonly DataContext _dataContext;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Конструктор класса
     /// </summary>
-    /// <param name="dataContext"></param>
-    public UserController(DataContext dataContext)
+    public UserController(IMediator mediator)
     {
-        _dataContext = dataContext;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -37,15 +38,8 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetInfo()
     {
         this.TryGetIdClaim(out int id);
-
-        var user = await _dataContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (user is null)
-            return NotFound($"Пользователь с ID {id} не найден");
-
-        return Ok(user);
+        var result = await _mediator.Send(new GetUserInfoQuery(id));
+        return result.ToHttpResponse();
     }
 
     /// <summary>
@@ -58,21 +52,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetOrderHistory()
     {
         this.TryGetIdClaim(out int userId);
-
-        var orders = await _dataContext.Orders
-            .AsNoTracking()
-            .Where(x => x.UserId == userId)
-            .ToListAsync();
-
-        var result = new List<OrderInHistory>();
-
-        foreach (var order in orders)
-        {
-            List<CartItem> items = JsonSerializer.Deserialize<List<CartItem>>(order.JsonData) ?? new();
-
-            result.Add(new OrderInHistory {Items = items, Date = order.Date});
-        }
-
-        return Ok(result);
+        var result = await _mediator.Send(new GetOrderHistoryQuery(userId));
+        return result.ToHttpResponse();
     }
 }

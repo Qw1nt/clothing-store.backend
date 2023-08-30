@@ -1,10 +1,11 @@
-﻿using Application;
-using Domain;
+﻿using API.Extensions;
+using Application.Categories.Commands;
+using Application.Categories.Queries;
 using Domain.Entities;
 using Domain.Common.Configurations;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -15,15 +16,14 @@ namespace API.Controllers;
 [Route("category")]
 public class CategoryController: ControllerBase
 {
-    private readonly DataContext _dataContext;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Конструктор класса
     /// </summary>
-    /// <param name="dataContext"></param>
-    public CategoryController(DataContext dataContext)
+    public CategoryController(IMediator mediator)
     {
-        _dataContext = dataContext;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -32,58 +32,40 @@ public class CategoryController: ControllerBase
     /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(typeof(IQueryable<Category>), StatusCodes.Status200OK)]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var result = _dataContext.Categories
-            .AsNoTracking();
-
-        return Ok(result);
+        var result = await _mediator.Send(new GetAllCategories());
+        return result.ToHttpResponse();
     }
 
     /// <summary>
     /// Добавить категорию
     /// </summary>
-    /// <param name="request"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpPost]
     [ProducesResponseType(typeof(List<Category>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> AddCategory([FromBody] AddCategoryRequest request)
+    public async Task<IActionResult> AddCategory([FromBody] AddCategoryCommand command)
     {
-        var category = new Category()
-        {
-            Name = request.Name
-        };
-
-        await _dataContext.Categories.AddAsync(category);
-        await _dataContext.SaveChangesAsync();
-
-        return Ok(_dataContext.Categories.AsNoTracking());
+        var result = await _mediator.Send(command);
+        return result.ToHttpResponse();
     }
 
     /// <summary>
     /// Редактировать категорию
     /// </summary>
-    /// <param name="request"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [Authorize(Policy = IdentityConfiguration.Policy.Admin)]
     [HttpPut]
     [ProducesResponseType(typeof(Category), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> EditCategory([FromBody] EditCategoryRequest request)
+    public async Task<IActionResult> EditCategory([FromBody] EditCategoryCommand command)
     {
-        var category = await _dataContext.Categories
-            .FirstOrDefaultAsync(x => x.Id == request.Id);
-
-        if (category is null)
-            return NotFound();
-
-        category.Name = request.Name;
-        _dataContext.Categories.Update(category);
-        await _dataContext.SaveChangesAsync();
-
-        return Ok(category);
-    }
+        var result = await _mediator.Send(command);
+        return result.ToHttpResponse();
+    }   
 
     /// <summary>
     /// Удалить категорию
@@ -96,15 +78,7 @@ public class CategoryController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCategory([FromRoute] int categoryId)
     {
-        var category = await _dataContext.Categories
-            .FirstOrDefaultAsync(x => x.Id == categoryId);
-
-        if (category is null)
-            return NotFound();
-
-        _dataContext.Categories.Remove(category);
-        await _dataContext.SaveChangesAsync();
-
-        return Ok();
+        var result = await _mediator.Send(new DeleteCategoryCommand(categoryId));
+        return result.ToHttpResponse();
     }
 }

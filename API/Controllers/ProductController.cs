@@ -4,7 +4,6 @@ using Application.Products.Queries;
 using Application.Reviews.Commands;
 using Domain.Entities;
 using Domain.Common.Configurations;
-using Infrastructure.Services.FileSaveService;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +17,13 @@ namespace API.Controllers;
 [Route("product")]
 public class ProductController : ControllerBase
 {
-    private readonly FileSaveService _fileSaveService;
     private readonly IMediator _mediator;
 
     /// <summary>
     /// Конструктор класса
     /// </summary>
-    /// <param name="fileSaveService"></param>
-    public ProductController(FileSaveService fileSaveService, IMediator mediator)
+    public ProductController(IMediator mediator)
     {
-        _fileSaveService = fileSaveService;
         _mediator = mediator;
     }
 

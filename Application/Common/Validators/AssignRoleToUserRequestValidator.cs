@@ -1,9 +1,10 @@
-﻿using Domain.Common.Configurations;
+﻿using Application.UserIdentity.Commands;
+using Domain.Common.Configurations;
 using FluentValidation;
 
 namespace Application.Common.Validators;
 
-public class AssignRoleToUserRequestValidator : AbstractValidator<AssignRoleToUserRequest>
+public class AssignRoleToUserRequestValidator : AbstractValidator<SetRoleForUserCommand>
 {
     public AssignRoleToUserRequestValidator()
     {

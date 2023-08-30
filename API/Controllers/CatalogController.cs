@@ -1,6 +1,5 @@
 ﻿using API.Extensions;
 using Application.UserCatalog.Queries;
-using Domain;
 using Domain.Common.Configurations;
 using Domain.Entities;
 using Mediator;
