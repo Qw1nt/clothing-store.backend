@@ -1,4 +1,5 @@
 ﻿using Application.Common.Contracts;
+using Application.Common.Mapper;
 using Domain.Common;
 using Domain.Entities;
 using Mediator;
@@ -33,13 +34,9 @@ public class CreateReviewForProductCommandHandler : ICommandHandler<CreateReview
         if (user is null)
             return OperationResult.BadRequest();
 
-        var review = new Review
-        {
-            Owner = user,
-            Title = command.Source.Title,
-            Content = command.Source.Content,
-            Date = DateTime.UtcNow
-        };
+        var review = command.Source.ToReview();
+        review.Owner = user;
+        review.Date = DateTime.UtcNow;
 
         var reviewEntry = await _applicationDataContext.Reviews
             .AddAsync(review, cancellationToken);

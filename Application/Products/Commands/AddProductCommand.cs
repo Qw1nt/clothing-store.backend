@@ -1,4 +1,5 @@
 ﻿using Application.Common.Contracts;
+using Application.Common.Mapper;
 using Application.Common.Validators;
 using Domain.Common;
 using Domain.Common.Configurations;
@@ -6,7 +7,7 @@ using Domain.Entities;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using ProductMapper = Application.Common.Mappers.ProductMapper;
+using ProductMapper = Application.Common.Mapper.ProductMapper;
 
 namespace Application.Products.Commands;
 
@@ -37,7 +38,7 @@ public class AddProductCommandHandler : ICommandHandler<AddProductCommand, Opera
         if (validationResult.IsValid == false)
             return OperationResult.BadRequest(validationResult.Errors);
 
-        var product = ProductMapper.FromAddCommand(command);
+        var product = command.ToProduct();
 
         if (command.Image != null)
             product.ImageUrl = await _fileSaveService.SaveAsync(command.Image, SavePaths.ProductsImages);

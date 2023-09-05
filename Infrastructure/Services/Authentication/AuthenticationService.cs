@@ -1,8 +1,7 @@
 ﻿using Application.Common.Contracts;
+using Application.Common.Mapper;
 using Application.UserIdentity.Commands;
 using Domain.Common;
-using Domain.Common.Configurations;
-using Domain.Entities;
 using Infrastructure.Services.HashSalt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -31,16 +30,10 @@ public class AuthenticationService : IAuthenticationService
             return new IdentityKeyPair(false, string.Empty, canRegister.error);
         
         _memoryCache.Set(command.Login, command);
-        
-        User user = new()
-        {
-            Login = command.Login,
-            PasswordHash = command.Password,
-            Salt = _hashSaltService.Salt(),
-            Role =  role ?? IdentityConfiguration.Roles.User,
-            RegisterDate = DateTime.UtcNow
-        };
-        
+
+        var user = command.ToUser();
+        user.Salt = _hashSaltService.Salt();
+        user.RegisterDate = DateTime.UtcNow;
         user.PasswordHash = _hashSaltService.Hash(user.PasswordHash, user.Salt);
 
         await _applicationDataContext.Users.AddAsync(user);

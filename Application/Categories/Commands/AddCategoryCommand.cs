@@ -1,4 +1,5 @@
 ﻿using Application.Common.Contracts;
+using Application.Common.Mapper;
 using Domain.Common;
 using Domain.Entities;
 using Mediator;
@@ -19,10 +20,7 @@ public class AddCategoryCommandHandler : ICommandHandler<AddCategoryCommand, Ope
 
     public async ValueTask<OperationResult> Handle(AddCategoryCommand command, CancellationToken cancellationToken)
     {
-        var category = new Category()
-        {
-            Name = command.Name
-        };
+        var category = command.ToCategory();
 
         await _applicationDataContext.Categories.AddAsync(category, cancellationToken);
         await _applicationDataContext.SaveChangesAsync(cancellationToken);
