@@ -6,6 +6,7 @@ using Domain.Entities;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using ProductMapper = Application.Common.Mappers.ProductMapper;
 
 namespace Application.Products.Commands;
 
@@ -36,12 +37,7 @@ public class AddProductCommandHandler : ICommandHandler<AddProductCommand, Opera
         if (validationResult.IsValid == false)
             return OperationResult.BadRequest(validationResult.Errors);
 
-        var product = new Product
-        {
-            Name = command.Name,
-            Description = command.Description,
-            Price = command.Price
-        };
+        var product = ProductMapper.FromAddCommand(command);
 
         if (command.Image != null)
             product.ImageUrl = await _fileSaveService.SaveAsync(command.Image, SavePaths.ProductsImages);
@@ -65,16 +61,12 @@ public class AddProductCommandHandler : ICommandHandler<AddProductCommand, Opera
             .ToListAsync();
 
         foreach (var category in existCategories)
-        {
             category.Products.Remove(product);
-        }
         
         _applicationDataContext.Categories.UpdateRange(existCategories);
 
         foreach (var category in categories)
-        {
             category.Products.Add(product);
-        }
 
         _applicationDataContext.Categories.UpdateRange(categories);
     }

@@ -4,8 +4,6 @@ namespace Domain.Entities;
 
 public class Product : Entity
 {
-    // public List<Category>? Categories { get; set; } = new();
-
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; } = null!;

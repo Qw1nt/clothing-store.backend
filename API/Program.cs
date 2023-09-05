@@ -1,11 +1,7 @@
 using API.Extensions;
 using Application;
-using Domain.Common.Configurations;
 using Infrastructure;
 using Infrastructure.Persistence.Extensions;
-using Infrastructure.Services.Authentication;
-using Infrastructure.Services.FileSaveService;
-using Infrastructure.Services.HashSalt;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -20,6 +16,7 @@ services.AddAuthenticationSwaggerGen();
 services.AddMemoryCache();
 services.AddDataContext(configuration);
 
+services.AddApplicationServices();
 services.AddInfrastructureServices(configuration, builder.Environment);
 
 services.AddCors();
